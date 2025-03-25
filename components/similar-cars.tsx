@@ -37,7 +37,7 @@ export function SimilarCars({ currentCarId, currentCarBrand, allCars }: SimilarC
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Similar Cars</h2>
+      <h2 className="text-2xl font-bold mb-6">O'xshash avtomobillar</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {similarCars.map((car) => (
           <CarCard 

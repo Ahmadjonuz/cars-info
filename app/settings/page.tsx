@@ -36,8 +36,8 @@ export default function SettingsPage() {
     e.preventDefault()
     if (newPassword !== confirmPassword) {
       toast({
-        title: "Error",
-        description: "Passwords do not match",
+        title: "Xatolik",
+        description: "Parollar mos kelmadi",
         variant: "destructive",
       })
       return
@@ -52,16 +52,16 @@ export default function SettingsPage() {
       if (error) throw error
 
       toast({
-        title: "Success",
-        description: "Password updated successfully",
+        title: "Muvaffaqiyatli",
+        description: "Parol muvaffaqiyatli yangilandi",
       })
       
       setNewPassword("")
       setConfirmPassword("")
     } catch (error) {
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to update password",
+        title: "Xatolik",
+        description: error instanceof Error ? error.message : "Parolni yangilashda xatolik yuz berdi",
         variant: "destructive",
       })
     } finally {
@@ -77,44 +77,44 @@ export default function SettingsPage() {
   const handleNotificationChange = (value: string) => {
     setEmailNotifications(value)
     toast({
-      title: "Success",
-      description: "Notification preferences updated",
+      title: "Muvaffaqiyatli",
+      description: "Bildirishnoma sozlamalari yangilandi",
     })
   }
 
   return (
     <div className="container max-w-4xl py-8 space-y-8">
-      <h1 className="text-3xl font-bold">Settings</h1>
+      <h1 className="text-3xl font-bold">Sozlamalar</h1>
       
       <Card>
         <CardHeader>
-          <CardTitle>Password</CardTitle>
-          <CardDescription>Change your password</CardDescription>
+          <CardTitle>Parol</CardTitle>
+          <CardDescription>Parolingizni o'zgartiring</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handlePasswordChange} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="new-password">New Password</Label>
+              <Label htmlFor="new-password">Yangi parol</Label>
               <Input
                 id="new-password"
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Enter new password"
+                placeholder="Yangi parolni kiriting"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
+              <Label htmlFor="confirm-password">Parolni tasdiqlang</Label>
               <Input
                 id="confirm-password"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm new password"
+                placeholder="Yangi parolni tasdiqlang"
               />
             </div>
             <Button type="submit" disabled={loading}>
-              {loading ? "Updating..." : "Update Password"}
+              {loading ? "Yangilanmoqda..." : "Parolni yangilash"}
             </Button>
           </form>
         </CardContent>
@@ -122,20 +122,20 @@ export default function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Appearance</CardTitle>
-          <CardDescription>Customize how Car Info looks on your device</CardDescription>
+          <CardTitle>Ko'rinish</CardTitle>
+          <CardDescription>CarInfo qurilmangizda qanday ko'rinishini sozlang</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <Label htmlFor="theme">Theme</Label>
+            <Label htmlFor="theme">Mavzu</Label>
             <Select value={theme} onValueChange={handleThemeChange}>
               <SelectTrigger>
-                <SelectValue placeholder="Select theme" />
+                <SelectValue placeholder="Mavzuni tanlang" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="system">System</SelectItem>
+                <SelectItem value="light">Yorug'</SelectItem>
+                <SelectItem value="dark">Qorong'i</SelectItem>
+                <SelectItem value="system">Tizim</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -144,20 +144,20 @@ export default function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Notifications</CardTitle>
-          <CardDescription>Manage your notification preferences</CardDescription>
+          <CardTitle>Bildirishnomalar</CardTitle>
+          <CardDescription>Bildirishnoma sozlamalarini boshqaring</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <Label htmlFor="notifications">Email Notifications</Label>
+            <Label htmlFor="notifications">Elektron pochta bildirishnomalari</Label>
             <Select value={emailNotifications} onValueChange={handleNotificationChange}>
               <SelectTrigger>
-                <SelectValue placeholder="Select notification preference" />
+                <SelectValue placeholder="Bildirishnoma turini tanlang" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All notifications</SelectItem>
-                <SelectItem value="important">Important only</SelectItem>
-                <SelectItem value="none">None</SelectItem>
+                <SelectItem value="all">Barcha bildirishnomalar</SelectItem>
+                <SelectItem value="important">Faqat muhimlari</SelectItem>
+                <SelectItem value="none">Hech qanday</SelectItem>
               </SelectContent>
             </Select>
           </div>

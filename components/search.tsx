@@ -52,18 +52,18 @@ export function Search() {
         onClick={() => setOpen(true)}
       >
         <SearchIcon className="h-4 w-4 xl:mr-2" />
-        <span className="hidden xl:inline-flex">Search cars...</span>
-        <span className="sr-only">Search cars</span>
+        <span className="hidden xl:inline-flex">Avtomobillarni qidirish...</span>
+        <span className="sr-only">Avtomobillarni qidirish</span>
         <kbd className="pointer-events-none absolute right-1.5 top-1.5 hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 xl:flex">
           <span className="text-xs">⌘</span>K
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <DialogTitle>Search Cars</DialogTitle>
-        <CommandInput placeholder="Search cars..." value={query} onValueChange={setQuery} />
+        <DialogTitle>Avtomobillarni qidirish</DialogTitle>
+        <CommandInput placeholder="Avtomobillarni qidirish..." value={query} onValueChange={setQuery} />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Cars">
+          <CommandEmpty>Natija topilmadi.</CommandEmpty>
+          <CommandGroup heading="Avtomobillar">
             {filteredCars.map((car) => (
               <CommandItem key={car.id} onSelect={() => handleSelect(car.id)} className="flex items-center gap-2 py-3">
                 <div className="flex flex-col">

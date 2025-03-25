@@ -18,105 +18,83 @@ export function FavoriteButton({ carId, initialFavorited = false }: FavoriteButt
   const { toast } = useToast()
 
   useEffect(() => {
-    checkFavoriteStatus()
-  }, [carId])
+    const checkFavoriteStatus = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        
+        if (!user) {
+          setIsFavorite(false)
+          return
+        }
 
-  async function checkFavoriteStatus() {
-    try {
-      const { data: { user }, error: userError } = await supabase.auth.getUser()
-      
-      if (userError) {
-        console.error("Error getting user:", userError.message)
-        return
-      }
+        const { data, error } = await supabase
+          .from('favorites')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('car_id', carId)
+          .maybeSingle()
 
-      if (!user) {
+        if (error) {
+          console.error("Error checking favorite status:", error.message)
+          return
+        }
+
+        setIsFavorite(!!data)
+      } catch (error) {
+        console.error("Error in checkFavoriteStatus:", error instanceof Error ? error.message : error)
         setIsFavorite(false)
-        return
       }
-
-      const { data, error } = await supabase
-        .from('favorites')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('car_id', carId)
-        .maybeSingle()
-
-      if (error) {
-        console.error("Error checking favorite status:", error.message)
-        return
-      }
-
-      setIsFavorite(!!data)
-    } catch (error) {
-      console.error("Error in checkFavoriteStatus:", error instanceof Error ? error.message : error)
     }
-  }
 
-  async function toggleFavorite() {
+    checkFavoriteStatus()
+  }, [carId, supabase])
+
+  const toggleFavorite = async () => {
     try {
       setIsLoading(true)
-      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      const { data: { user } } = await supabase.auth.getUser()
       
-      if (userError) {
-        console.error("Error getting user:", userError.message)
-        throw userError
-      }
-
       if (!user) {
         toast({
-          title: "Authentication Required",
-          description: "Please sign in to add favorites.",
+          title: "Avtorizatsiya zarur",
+          description: "Sevimlilar ro'yxatiga qo'shish uchun tizimga kiring.",
           variant: "destructive",
         })
         return
       }
 
       if (isFavorite) {
-        // Remove favorite
         const { error: deleteError } = await supabase
           .from('favorites')
           .delete()
           .eq('user_id', user.id)
           .eq('car_id', carId)
 
-        if (deleteError) {
-          console.error("Error removing favorite:", deleteError.message)
-          throw deleteError
-        }
+        if (deleteError) throw deleteError
 
         setIsFavorite(false)
         toast({
-          title: "Removed from Favorites",
-          description: "This car has been removed from your favorites.",
+          title: "Sevimlilardan o'chirildi",
+          description: "Bu avtomobil sevimlilar ro'yxatingizdan o'chirildi.",
         })
       } else {
-        // Add favorite
         const { error: insertError } = await supabase
           .from('favorites')
-          .insert([
-            {
-              user_id: user.id,
-              car_id: carId,
-            }
-          ])
+          .insert([{ user_id: user.id, car_id: carId }])
 
-        if (insertError) {
-          console.error("Error adding favorite:", insertError.message)
-          throw insertError
-        }
+        if (insertError) throw insertError
 
         setIsFavorite(true)
         toast({
-          title: "Added to Favorites",
-          description: "This car has been added to your favorites.",
+          title: "Sevimlilarga qo'shildi",
+          description: "Bu avtomobil sevimlilar ro'yxatingizga qo'shildi.",
         })
       }
     } catch (error) {
       console.error("Error in toggleFavorite:", error instanceof Error ? error.message : error)
       toast({
-        title: "Error",
-        description: "Failed to update favorites. Please try again.",
+        title: "Xatolik",
+        description: "Sevimlilar ro'yxatini yangilashda xatolik yuz berdi. Iltimos, qayta urinib ko'ring.",
         variant: "destructive",
       })
     } finally {
@@ -126,15 +104,15 @@ export function FavoriteButton({ carId, initialFavorited = false }: FavoriteButt
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       size="icon"
-      className={`absolute top-2 right-2 z-10 rounded-full p-2 ${
-        isFavorite ? 'text-red-500 hover:text-red-600' : 'text-white hover:text-red-500'
-      }`}
       onClick={toggleFavorite}
       disabled={isLoading}
+      aria-label={isFavorite ? "Sevimlilardan o'chirish" : "Sevimlilarga qo'shish"}
     >
-      <Heart className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`} />
+      <Heart 
+        className={`h-4 w-4 ${isFavorite ? 'fill-primary text-primary' : 'text-muted-foreground'}`} 
+      />
     </Button>
   )
 }

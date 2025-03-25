@@ -10,9 +10,9 @@ export default function Home() {
     <div className="container mx-auto px-4 py-12">
       <section className="mb-20">
         <div className="flex flex-col items-center text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Discover Premium Car Brands</h1>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Premium avtomobil brendlarini kashf eting</h1>
           <p className="text-xl text-muted-foreground max-w-3xl">
-            Explore detailed information about the world's most prestigious automotive brands
+            Dunyoning eng nufuzli avtomobil brendlari haqida batafsil ma'lumot oling
           </p>
         </div>
 
@@ -27,7 +27,7 @@ export default function Home() {
                   <h2 className="text-2xl font-bold">{brand.name}</h2>
                   <p className="text-muted-foreground mt-2">{brand.shortDescription}</p>
                   <Button className="mt-4" variant="outline">
-                    Explore {brand.name}
+                    {brand.name} haqida batafsil
                   </Button>
                 </CardContent>
               </Card>
@@ -38,9 +38,9 @@ export default function Home() {
 
       <section className="mb-20">
         <div className="flex flex-col items-center text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Featured Cars</h2>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Mashhur Avtomobillar</h2>
           <p className="text-lg text-muted-foreground max-w-2xl">
-            Discover our handpicked selection of exceptional vehicles
+            Bizning maxsus tanlangan ajoyib avtomobillarimiz bilan tanishing
           </p>
         </div>
 
@@ -51,17 +51,16 @@ export default function Home() {
         <div className="bg-muted rounded-3xl p-8 md:p-12">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Compare Your Favorite Cars</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Sevimli Avtomobillaringizni Solishtiring</h2>
               <p className="text-lg text-muted-foreground mb-6">
-                Our comparison tool helps you make informed decisions by comparing specifications, features, and
-                performance metrics.
+                Bizning solishtirish vositamiz texnik xususiyatlar, funksiyalar va ishlash ko'rsatkichlarini taqqoslash orqali to'g'ri qaror qabul qilishingizga yordam beradi.
               </p>
               <Button asChild size="lg">
-                <Link href="/compare">Start Comparing</Link>
+                <Link href="/compare">Solishtirishni Boshlash</Link>
               </Button>
             </div>
             <div className="relative h-64 md:h-80">
-              <Image src="/images/comparison.jpg" alt="Car Comparison" fill className="object-cover rounded-xl" />
+              <Image src="/images/comparison.jpg" alt="Avtomobillarni solishtirish" fill className="object-cover rounded-xl" />
             </div>
           </div>
         </div>

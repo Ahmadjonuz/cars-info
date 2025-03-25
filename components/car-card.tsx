@@ -13,7 +13,7 @@ import { GaugeCircle, Zap, Timer, Fuel } from "lucide-react"
 type BrandKey = keyof typeof carImages
 type ModelKey<T extends BrandKey> = keyof typeof carImages[T]['models']
 
-interface Car {
+export interface Car {
   id: string
   name: string
   brand: string
@@ -24,7 +24,7 @@ interface Car {
   mpg: string
   description: string
   features: string[]
-  image?: string
+  image: string
 }
 
 interface CarCardProps {

@@ -9,11 +9,11 @@ export default function Footer() {
           <div>
             <h3 className="font-bold text-lg mb-4">CarInfo</h3>
             <p className="text-muted-foreground">
-              Discover detailed information about the world's most prestigious automotive brands.
+              Dunyoning eng nufuzli avtomobil brendlari haqida batafsil ma'lumotni o'rganing.
             </p>
           </div>
           <div>
-            <h3 className="font-bold text-lg mb-4">Brands</h3>
+            <h3 className="font-bold text-lg mb-4">Brendlar</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/brands/bmw" className="text-muted-foreground hover:text-primary">
@@ -38,32 +38,32 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="font-bold text-lg mb-4">Links</h3>
+            <h3 className="font-bold text-lg mb-4">Havolalar</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/about" className="text-muted-foreground hover:text-primary">
-                  About Us
+                  Biz haqimizda
                 </Link>
               </li>
               <li>
                 <Link href="/contact" className="text-muted-foreground hover:text-primary">
-                  Contact
+                  Bog'lanish
                 </Link>
               </li>
               <li>
                 <Link href="/privacy" className="text-muted-foreground hover:text-primary">
-                  Privacy Policy
+                  Maxfiylik siyosati
                 </Link>
               </li>
               <li>
                 <Link href="/terms" className="text-muted-foreground hover:text-primary">
-                  Terms of Service
+                  Foydalanish shartlari
                 </Link>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="font-bold text-lg mb-4">Follow Us</h3>
+            <h3 className="font-bold text-lg mb-4">Bizni kuzating</h3>
             <div className="flex space-x-4">
               <Link href="#" className="text-muted-foreground hover:text-primary">
                 <Facebook className="h-5 w-5" />
@@ -85,7 +85,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t mt-12 pt-8 text-center text-muted-foreground">
-          <p>© {new Date().getFullYear()} CarInfo. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} CarInfo. Barcha huquqlar himoyalangan.</p>
         </div>
       </div>
     </footer>

@@ -1,4 +1,4 @@
-import { featuredCars, carSpecs, carImages } from "@/lib/data"
+import { cars, carSpecs, carImages } from "@/lib/data"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -12,40 +12,79 @@ type BrandKey = keyof typeof carImages
 type ModelKey<T extends BrandKey> = keyof typeof carImages[T]['models']
 
 export function generateStaticParams() {
-  return featuredCars.map((car) => ({
+  return cars.map((car) => ({
     id: car.id,
   }))
 }
 
 export default function CarPage({ params }: { params: { id: string } }) {
-  const car = featuredCars.find((c) => c.id === params.id)
+  const car = cars.find((c) => c.id === params.id)
 
   if (!car) {
     notFound()
   }
 
-  // Get the brand slug for image lookup
   const brandSlug = car.brand.toLowerCase().replace(/\s+/g, '') as BrandKey
-  
-  // Get the car image from the carImages object
   const carImage = carImages[brandSlug]?.models[car.id as ModelKey<typeof brandSlug>] || car.image
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        <div className="relative h-[400px] w-full rounded-lg overflow-hidden">
-          <Image src={carImage} alt={car.name} fill className="object-cover" priority />
+    <div>
+      {/* Hero Section */}
+      <div className="relative h-[70vh] w-full">
+        <Image 
+          src={carImage} 
+          alt={car.name} 
+          fill 
+          className="object-cover brightness-75"
+          priority 
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-8">
+          <div className="container mx-auto">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">{car.name}</h1>
+            <p className="text-xl text-white/90 max-w-2xl">{car.description}</p>
+          </div>
         </div>
-        <CarDetailsClient car={car} />
       </div>
 
-      <CarSpecifications carId={car.id} />
+      {/* Sticky Navigation */}
+      <div className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+        <nav className="container mx-auto flex items-center gap-6 overflow-x-auto py-4">
+          <a href="#umumiy-malumot" className="text-sm font-medium hover:text-primary transition-colors">
+            Umumiy ma'lumot
+          </a>
+          <a href="#xususiyatlar" className="text-sm font-medium hover:text-primary transition-colors">
+            Xususiyatlar
+          </a>
+          <a href="#jihozlar" className="text-sm font-medium hover:text-primary transition-colors">
+            Jihozlar
+          </a>
+          <a href="#oxshash-modellar" className="text-sm font-medium hover:text-primary transition-colors">
+            O'xshash modellar
+          </a>
+        </nav>
+      </div>
 
-      <SimilarCars 
-        currentCarId={car.id}
-        currentCarBrand={car.brand}
-        allCars={featuredCars}
-      />
+      <main className="container mx-auto px-4 py-12">
+        {/* Overview Section */}
+        <section id="umumiy-malumot" className="mb-16">
+          <CarDetailsClient car={car} />
+        </section>
+
+        {/* Specifications Section */}
+        <section id="xususiyatlar" className="mb-16">
+          <CarSpecifications carId={car.id} />
+        </section>
+
+        {/* Similar Cars Section */}
+        <section id="oxshash-modellar" className="mb-16">
+          <SimilarCars 
+            currentCarId={car.id}
+            currentCarBrand={car.brand}
+            allCars={cars}
+          />
+        </section>
+      </main>
     </div>
   )
 }

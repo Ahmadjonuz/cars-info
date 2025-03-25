@@ -32,21 +32,21 @@ export default function FavoritesPage() {
 
   const fetchFavorites = async () => {
     try {
-      console.log("Fetching favorites...")
+      console.log("Sevimlilar yuklanmoqda...")
       const { data: { user }, error: userError } = await supabase.auth.getUser()
       
       if (userError) {
-        console.error("Error getting user:", userError)
+        console.error("Foydalanuvchini olishda xatolik:", userError)
         throw userError
       }
 
       if (!user) {
-        console.log("No user found, redirecting to login")
+        console.log("Foydalanuvchi topilmadi, login sahifasiga yo'naltirilmoqda")
         router.push('/login')
         return
       }
 
-      console.log("User found:", user.id)
+      console.log("Foydalanuvchi topildi:", user.id)
       // Get user's favorite car IDs
       const { data: favoriteData, error: favoriteError } = await supabase
         .from('favorites')
@@ -54,27 +54,27 @@ export default function FavoritesPage() {
         .eq('user_id', user.id)
 
       if (favoriteError) {
-        console.error("Error fetching favorites:", favoriteError)
+        console.error("Sevimlilarni olishda xatolik:", favoriteError)
         throw favoriteError
       }
 
-      console.log("Favorite data:", favoriteData)
+      console.log("Sevimlilar ma'lumotlari:", favoriteData)
       // Get the full car details for each favorite
       const favoriteCars = favoriteData
         .map(favorite => {
           const car = featuredCars.find(car => car.id === favorite.car_id)
-          console.log("Found car for favorite:", favorite.car_id, car)
+          console.log("Sevimli avtomobil topildi:", favorite.car_id, car)
           return car
         })
         .filter(car => car !== undefined)
 
-      console.log("Final favorite cars:", favoriteCars)
+      console.log("Barcha sevimli avtomobillar:", favoriteCars)
       setFavorites(favoriteCars)
     } catch (error) {
-      console.error("Error in fetchFavorites:", error)
+      console.error("Sevimlilarni olishda xatolik:", error)
       toast({
-        title: "Error",
-        description: "Failed to load favorites. Please try again.",
+        title: "Xatolik",
+        description: "Sevimlilarni yuklashda xatolik yuz berdi. Iltimos, qayta urinib ko'ring.",
         variant: "destructive",
       })
     } finally {
@@ -83,7 +83,7 @@ export default function FavoritesPage() {
   }
 
   useEffect(() => {
-    console.log("Setting up favorites page...")
+    console.log("Sevimlilar sahifasi yuklanmoqda...")
     fetchFavorites()
 
     // Subscribe to changes in the favorites table
@@ -97,14 +97,14 @@ export default function FavoritesPage() {
           table: 'favorites'
         },
         (payload) => {
-          console.log("Favorites table changed:", payload)
+          console.log("Sevimlilar o'zgartirildi:", payload)
           fetchFavorites()
         }
       )
       .subscribe()
 
     return () => {
-      console.log("Cleaning up favorites page...")
+      console.log("Sevimlilar sahifasi tozalanmoqda...")
       supabase.removeChannel(channel)
     }
   }, [supabase, router, toast])

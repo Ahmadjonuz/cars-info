@@ -13,8 +13,8 @@ import SupabaseProvider from "@/components/providers/supabase-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Car Info Website",
-  description: "Find information about cars",
+  title: "CarInfo - Avtomobillar haqida ma'lumot",
+  description: "Eng so'nggi avtomobillar haqida ma'lumot oling va ularni solishtiring",
 }
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="uz" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <div id="root" suppressHydrationWarning>
           <SupabaseProvider>

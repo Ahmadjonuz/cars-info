@@ -4,10 +4,10 @@ export default function VerifyEmailPage() {
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-2xl font-semibold tracking-tight">
-            Check your email
+            Elektron pochtangizni tekshiring
           </h1>
           <p className="text-sm text-muted-foreground">
-            We've sent you a verification link. Please check your email to verify your account.
+            Sizga tasdiqlash havolasini yubordik. Iltimos, hisobingizni tasdiqlash uchun elektron pochtangizni tekshiring.
           </p>
         </div>
       </div>

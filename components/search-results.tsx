@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { featuredCars } from "@/lib/data"
+import { cars } from "@/lib/cars"
 import { CarCard } from "@/components/car-card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,7 +15,7 @@ interface SearchResultsProps {
 
 export function SearchResults({ onClose }: SearchResultsProps) {
   const [query, setQuery] = useState("")
-  const [results, setResults] = useState(featuredCars)
+  const [results, setResults] = useState(cars)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
@@ -23,7 +23,7 @@ export function SearchResults({ onClose }: SearchResultsProps) {
   useEffect(() => {
     const handleSearch = async () => {
       if (!query.trim()) {
-        setResults(featuredCars)
+        setResults(cars)
         return
       }
 
@@ -31,7 +31,7 @@ export function SearchResults({ onClose }: SearchResultsProps) {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500))
       
-      const filtered = featuredCars.filter(car => 
+      const filtered = cars.filter(car => 
         car.name.toLowerCase().includes(query.toLowerCase()) ||
         car.brand.toLowerCase().includes(query.toLowerCase())
       )
@@ -47,7 +47,7 @@ export function SearchResults({ onClose }: SearchResultsProps) {
   const handleCarClick = async (carId: string) => {
     try {
       // Find the car in our data to verify it exists
-      const car = featuredCars.find(c => c.id === carId)
+      const car = cars.find(c => c.id === carId)
       if (!car) {
         console.error("Car not found:", carId)
         toast({

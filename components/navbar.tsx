@@ -36,7 +36,7 @@ export function Navbar() {
         if (error) throw error
         setUser(user)
       } catch (error) {
-        console.error("Error loading user:", error)
+        console.error("Foydalanuvchini yuklashda xatolik:", error)
       } finally {
         setLoading(false)
       }
@@ -58,18 +58,18 @@ export function Navbar() {
       if (error) throw error
       router.push("/auth/login")
     } catch (error) {
-      console.error("Error signing out:", error)
+      console.error("Tizimdan chiqishda xatolik:", error)
     }
   }
 
   const routes = [
-    { href: "/", label: "Home" },
+    { href: "/", label: "Bosh sahifa" },
     { href: "/brands/bmw", label: "BMW" },
     { href: "/brands/audi", label: "Audi" },
     { href: "/brands/toyota", label: "Toyota" },
     { href: "/brands/mercedes", label: "Mercedes" },
-    { href: "/compare", label: "Compare" },
-    { href: "/search", label: "Advanced Search" },
+    { href: "/compare", label: "Taqqoslash" },
+    { href: "/search", label: "Kengaytirilgan qidiruv" },
   ]
 
   return (
@@ -80,7 +80,7 @@ export function Navbar() {
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="md:hidden">
                 <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle menu</span>
+                <span className="sr-only">Menyuni ochish</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
@@ -107,7 +107,7 @@ export function Navbar() {
                       pathname === "/favorites" ? "text-primary" : "text-muted-foreground",
                     )}
                   >
-                    Favorites
+                    Sevimlilar
                   </Link>
                 )}
               </nav>
@@ -139,42 +139,42 @@ export function Navbar() {
               <Button variant="ghost" size="icon" asChild>
                 <Link href="/favorites">
                   <Heart className="h-5 w-5" />
-                  <span className="sr-only">Favorites</span>
+                  <span className="sr-only">Sevimlilar</span>
                 </Link>
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar className="h-8 w-8 cursor-pointer">
-                    <AvatarImage src="/placeholder-user.jpg" alt="User" />
+                    <AvatarImage src="/placeholder-user.jpg" alt="Foydalanuvchi" />
                     <AvatarFallback>
                       <User className="h-4 w-4" />
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuLabel>Mening hisobim</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/profile">Profile</Link>
+                    <Link href="/profile">Profil</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/favorites">Favorites</Link>
+                    <Link href="/favorites">Sevimlilar</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/settings">Settings</Link>
+                    <Link href="/settings">Sozlamalar</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut}>Log out</DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut}>Chiqish</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
           ) : (
             <div className="flex items-center gap-2">
               <Button variant="ghost" asChild>
-                <Link href="/auth/login">Login</Link>
+                <Link href="/auth/login">Kirish</Link>
               </Button>
               <Button asChild>
-                <Link href="/auth/register">Register</Link>
+                <Link href="/auth/register">Ro'yxatdan o'tish</Link>
               </Button>
             </div>
           )}

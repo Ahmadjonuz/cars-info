@@ -32,21 +32,21 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
           <p className="mb-4">{brand.description}</p>
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <span className="text-muted-foreground">Headquarters:</span> {brand.headquarters}
+              <span className="text-muted-foreground">Bosh qarorgohi:</span> {brand.headquarters}
             </div>
             <div>
-              <span className="text-muted-foreground">Founded:</span> {brand.founded}
+              <span className="text-muted-foreground">Asos solingan:</span> {brand.founded}
             </div>
           </div>
           <Button asChild variant="outline">
             <Link href={brand.website} target="_blank" rel="noopener noreferrer">
-              Visit Official Website
+              Rasmiy veb-saytga o'tish
             </Link>
           </Button>
         </div>
       </div>
 
-      <h2 className="text-3xl font-bold mb-8">{brand.name} Models</h2>
+      <h2 className="text-3xl font-bold mb-8">{brand.name} modellari</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {brandCars.map((car) => (
           <Card key={car.id} className="overflow-hidden transition-all hover:shadow-lg">
@@ -63,24 +63,24 @@ export default function BrandPage({ params }: { params: { brand: string } }) {
               </div>
               <div className="grid grid-cols-2 gap-2 mb-4">
                 <div className="flex items-center text-sm">
-                  <span className="text-muted-foreground mr-2">Engine:</span>
+                  <span className="text-muted-foreground mr-2">Dvigatel:</span>
                   <span>{car.engine}</span>
                 </div>
                 <div className="flex items-center text-sm">
-                  <span className="text-muted-foreground mr-2">Power:</span>
+                  <span className="text-muted-foreground mr-2">Quvvat:</span>
                   <span>{car.power}</span>
                 </div>
                 <div className="flex items-center text-sm">
-                  <span className="text-muted-foreground mr-2">0-60:</span>
+                  <span className="text-muted-foreground mr-2">0-100 km/s:</span>
                   <span>{car.acceleration}</span>
                 </div>
                 <div className="flex items-center text-sm">
-                  <span className="text-muted-foreground mr-2">MPG:</span>
+                  <span className="text-muted-foreground mr-2">Yoqilg'i sarfi:</span>
                   <span>{car.mpg}</span>
                 </div>
               </div>
               <Button asChild className="w-full">
-                <Link href={`/cars/${car.id}`}>View Details</Link>
+                <Link href={`/cars/${car.id}`}>Batafsil ma'lumot</Link>
               </Button>
             </CardContent>
           </Card>

@@ -26,32 +26,32 @@ export default function ProfilePage() {
   async function getProfile() {
     try {
       setLoading(true)
-      console.log("Fetching user...")
+      console.log("Foydalanuvchi ma'lumotlari yuklanmoqda...")
       const { data: { user }, error: userError } = await supabase.auth.getUser()
       
       if (userError) {
-        console.error("Error getting user:", userError.message)
+        console.error("Foydalanuvchini olishda xatolik:", userError.message)
         throw userError
       }
 
       if (!user) {
-        console.log("No user found, redirecting to login")
+        console.log("Foydalanuvchi topilmadi, login sahifasiga yo'naltirilmoqda")
         router.push('/auth/login')
         return
       }
 
-      console.log("User found:", user.id)
+      console.log("Foydalanuvchi topildi:", user.id)
       setEmail(user.email || "")
 
       // Get profile data
-      console.log("Fetching profile for user:", user.id)
+      console.log("Profil ma'lumotlari yuklanmoqda:", user.id)
       const { data, error } = await supabase
         .from('profiles')
         .select()
         .eq('id', user.id)
 
       if (error) {
-        console.error("Error fetching profile:", {
+        console.error("Profilni olishda xatolik:", {
           message: error.message,
           details: error.details,
           hint: error.hint,
@@ -60,7 +60,7 @@ export default function ProfilePage() {
         throw error
       }
 
-      console.log("Profile data:", data)
+      console.log("Profil ma'lumotlari:", data)
 
       if (data && data.length > 0) {
         const profile = data[0]
@@ -68,7 +68,7 @@ export default function ProfilePage() {
         setPhone(profile.phone || "")
       } else {
         // Create a new profile if it doesn't exist
-        console.log("No profile found, creating new profile for user:", user.id)
+        console.log("Profil topilmadi, yangi profil yaratilmoqda:", user.id)
         const { data: newProfile, error: insertError } = await supabase
           .from('profiles')
           .insert({
@@ -82,7 +82,7 @@ export default function ProfilePage() {
           .single()
 
         if (insertError) {
-          console.error("Error creating profile:", {
+          console.error("Profil yaratishda xatolik:", {
             message: insertError.message,
             details: insertError.details,
             hint: insertError.hint,
@@ -91,10 +91,10 @@ export default function ProfilePage() {
           throw insertError
         }
 
-        console.log("New profile created:", newProfile)
+        console.log("Yangi profil yaratildi:", newProfile)
       }
     } catch (error: any) {
-      console.error("Error in getProfile:", {
+      console.error("Profilni olishda xatolik:", {
         name: error?.name,
         message: error?.message,
         stack: error?.stack,
@@ -103,8 +103,8 @@ export default function ProfilePage() {
         code: error?.code
       })
       toast({
-        title: "Error",
-        description: "Failed to load profile. Please try again.",
+        title: "Xatolik",
+        description: "Profilni yuklashda xatolik yuz berdi. Iltimos, qayta urinib ko'ring.",
         variant: "destructive",
       })
     } finally {
@@ -115,22 +115,22 @@ export default function ProfilePage() {
   async function updateProfile() {
     try {
       setLoading(true)
-      console.log("Getting current user...")
+      console.log("Joriy foydalanuvchi olinmoqda...")
       const { data: { user }, error: userError } = await supabase.auth.getUser()
 
       if (userError) {
-        console.error("Error getting user:", userError.message)
+        console.error("Foydalanuvchini olishda xatolik:", userError.message)
         throw userError
       }
 
       if (!user) {
-        console.log("No user found, redirecting to login")
+        console.log("Foydalanuvchi topilmadi, login sahifasiga yo'naltirilmoqda")
         router.push('/auth/login')
         return
       }
 
-      console.log("Updating profile for user:", user.id)
-      console.log("Profile data to update:", {
+      console.log("Profil yangilanmoqda:", user.id)
+      console.log("Yangilanadigan ma'lumotlar:", {
         full_name: fullName,
         phone: phone,
         updated_at: new Date().toISOString()
@@ -144,7 +144,7 @@ export default function ProfilePage() {
         .single()
 
       if (checkError) {
-        console.error("Error checking profile:", {
+        console.error("Profilni tekshirishda xatolik:", {
           message: checkError.message,
           details: checkError.details,
           hint: checkError.hint,
@@ -154,7 +154,7 @@ export default function ProfilePage() {
       }
 
       if (!existingProfile) {
-        console.log("Profile does not exist, creating new profile")
+        console.log("Profil mavjud emas, yangi profil yaratilmoqda")
         const { data: newProfile, error: insertError } = await supabase
           .from('profiles')
           .insert({
@@ -168,7 +168,7 @@ export default function ProfilePage() {
           .single()
 
         if (insertError) {
-          console.error("Error creating profile:", {
+          console.error("Profil yaratishda xatolik:", {
             message: insertError.message,
             details: insertError.details,
             hint: insertError.hint,
@@ -177,9 +177,9 @@ export default function ProfilePage() {
           throw insertError
         }
 
-        console.log("New profile created:", newProfile)
+        console.log("Yangi profil yaratildi:", newProfile)
       } else {
-        console.log("Updating existing profile")
+        console.log("Mavjud profil yangilanmoqda")
         const { data, error } = await supabase
           .from('profiles')
           .update({
@@ -192,7 +192,7 @@ export default function ProfilePage() {
           .single()
 
         if (error) {
-          console.error("Error updating profile:", {
+          console.error("Profilni yangilashda xatolik:", {
             message: error.message,
             details: error.details,
             hint: error.hint,
@@ -201,15 +201,15 @@ export default function ProfilePage() {
           throw error
         }
 
-        console.log("Profile updated successfully:", data)
+        console.log("Profil muvaffaqiyatli yangilandi:", data)
       }
 
       toast({
-        title: "Success",
-        description: "Profile updated successfully!",
+        title: "Muvaffaqiyatli",
+        description: "Profil muvaffaqiyatli yangilandi!",
       })
     } catch (error: any) {
-      console.error("Error in updateProfile:", {
+      console.error("Profilni yangilashda xatolik:", {
         name: error?.name,
         message: error?.message,
         stack: error?.stack,
@@ -218,8 +218,8 @@ export default function ProfilePage() {
         code: error?.code
       })
       toast({
-        title: "Error",
-        description: error?.message || "Failed to update profile. Please try again.",
+        title: "Xatolik",
+        description: error?.message || "Profilni yangilashda xatolik yuz berdi. Iltimos, qayta urinib ko'ring.",
         variant: "destructive",
       })
     } finally {
@@ -233,10 +233,10 @@ export default function ProfilePage() {
       if (error) throw error
       router.push('/login')
     } catch (error) {
-      console.error("Error signing out:", error)
+      console.error("Tizimdan chiqishda xatolik:", error)
       toast({
-        title: "Error",
-        description: "Failed to sign out. Please try again.",
+        title: "Xatolik",
+        description: "Tizimdan chiqishda xatolik yuz berdi. Iltimos, qayta urinib ko'ring.",
         variant: "destructive",
       })
     }
