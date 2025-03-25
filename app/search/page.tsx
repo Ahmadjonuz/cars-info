@@ -9,6 +9,21 @@ import { Slider } from "@/components/ui/slider"
 import { Label } from "@/components/ui/label"
 import { CarCard } from "@/components/car-card"
 import { featuredCars, brands } from "@/lib/data"
+import { useToast } from "@/components/ui/use-toast"
+
+interface Car {
+  id: string
+  name: string
+  brand: string
+  image: string
+  price: string
+  engine: string
+  power: string
+  acceleration: string
+  mpg: string
+  description: string
+  features: string[]
+}
 
 export default function SearchPage() {
   const searchParams = useSearchParams()
@@ -18,7 +33,9 @@ export default function SearchPage() {
   const [selectedBrand, setSelectedBrand] = useState<string>("all")
   const [priceRange, setPriceRange] = useState([0, 200000])
   const [powerRange, setPowerRange] = useState([0, 700])
-  const [results, setResults] = useState(featuredCars)
+  const [results, setResults] = useState<Car[]>([])
+  const [loading, setLoading] = useState(false)
+  const { toast } = useToast()
 
   useEffect(() => {
     const filtered = featuredCars.filter((car) => {
@@ -43,84 +60,48 @@ export default function SearchPage() {
     setResults(filtered)
   }, [query, selectedBrand, priceRange, powerRange])
 
-  return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8">Search Cars</h1>
+  const handleSearch = () => {
+    setLoading(true)
+    // Implement search logic here
+    setLoading(false)
+  }
 
-      <div className="grid gap-6 md:grid-cols-4 mb-8">
-        <div className="space-y-2">
-          <Label htmlFor="search">Search</Label>
+  return (
+    <div className="container mx-auto py-10">
+      <div className="flex flex-col gap-6">
+        <div>
+          <h1 className="text-3xl font-bold">Avtomobil qidirish</h1>
+          <p className="text-muted-foreground">
+            Avtomobillarni nomi yoki brendi bo'yicha qidiring
+          </p>
+        </div>
+        <div className="flex gap-2">
           <Input
-            id="search"
-            placeholder="Search by brand, model, or features..."
+            placeholder="BMW M5, Mercedes-Benz yoki Toyota..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            className="max-w-xl"
           />
+          <Button onClick={handleSearch} disabled={loading}>
+            {loading ? "Qidirilmoqda..." : "Qidirish"}
+          </Button>
         </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="brand">Brand</Label>
-          <Select value={selectedBrand} onValueChange={setSelectedBrand}>
-            <SelectTrigger id="brand">
-              <SelectValue placeholder="Select brand" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Brands</SelectItem>
-              {brands.map((brand) => (
-                <SelectItem key={brand.slug} value={brand.name}>
-                  {brand.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-4">
-          <Label>
-            Price Range (${priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()})
-          </Label>
-          <Slider
-            defaultValue={[0, 200000]}
-            max={200000}
-            step={5000}
-            value={priceRange}
-            onValueChange={setPriceRange}
-          />
-        </div>
-
-        <div className="space-y-4">
-          <Label>
-            Power Range ({powerRange[0]} hp - {powerRange[1]} hp)
-          </Label>
-          <Slider defaultValue={[0, 700]} max={700} step={50} value={powerRange} onValueChange={setPowerRange} />
-        </div>
-      </div>
-
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-4">Results ({results.length})</h2>
-        {results.length === 0 && (
-          <div className="text-center py-12 bg-muted rounded-lg">
-            <p className="text-lg text-muted-foreground">No cars match your search criteria.</p>
-            <Button
-              variant="outline"
-              className="mt-4"
-              onClick={() => {
-                setQuery("")
-                setSelectedBrand("all")
-                setPriceRange([0, 200000])
-                setPowerRange([0, 700])
-              }}
-            >
-              Reset Filters
-            </Button>
+        {results.length > 0 ? (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {results.map((car) => (
+              <CarCard key={car.id} car={car} />
+            ))}
           </div>
-        )}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {results.map((car) => (
-          <CarCard key={car.id} car={car} />
-        ))}
+        ) : query ? (
+          <div className="flex flex-col items-center justify-center gap-4 py-10">
+            <div className="text-center">
+              <h2 className="text-lg font-semibold">Avtomobillar topilmadi</h2>
+              <p className="text-muted-foreground">
+                Ushbu so'rov bo'yicha hech qanday avtomobil topilmadi
+              </p>
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   )

@@ -9,9 +9,23 @@ import { useSupabase } from "@/components/providers/supabase-provider"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
 
+interface Car {
+  id: string
+  name: string
+  brand: string
+  image: string
+  price: string
+  engine: string
+  power: string
+  acceleration: string
+  mpg: string
+  description: string
+  features: string[]
+}
+
 export default function FavoritesPage() {
-  const [favorites, setFavorites] = useState<any[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
+  const [favorites, setFavorites] = useState<Car[]>([])
   const { supabase } = useSupabase()
   const router = useRouter()
   const { toast } = useToast()
@@ -64,7 +78,7 @@ export default function FavoritesPage() {
         variant: "destructive",
       })
     } finally {
-      setIsLoading(false)
+      setLoading(false)
     }
   }
 
@@ -95,7 +109,7 @@ export default function FavoritesPage() {
     }
   }, [supabase, router, toast])
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="container mx-auto px-4 py-12">
         <div className="flex justify-center items-center h-64">
@@ -106,31 +120,36 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8">Your Favorite Cars</h1>
-
-      {favorites.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {favorites.map((car) => (
-            <CarCard 
-              key={car.id} 
-              car={car} 
-              isFavorited={true} 
-              showFavoriteButton={true} 
-            />
-          ))}
+    <div className="container mx-auto py-10">
+      <div className="flex flex-col gap-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Sevimli avtomobillar</h1>
+            <p className="text-muted-foreground">
+              Sizning sevimli avtomobillaringiz
+            </p>
+          </div>
         </div>
-      ) : (
-        <div className="text-center py-16">
-          <h2 className="text-2xl font-bold mb-4">No favorites yet</h2>
-          <p className="text-muted-foreground mb-8">
-            You haven't added any cars to your favorites yet. Browse our collection and add some!
-          </p>
-          <Button asChild>
-            <Link href="/">Browse Cars</Link>
-          </Button>
-        </div>
-      )}
+        {favorites.length > 0 ? (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {favorites.map((car) => (
+              <CarCard key={car.id} car={car} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-4 py-10">
+            <div className="text-center">
+              <h2 className="text-lg font-semibold">Sevimli avtomobillar yo'q</h2>
+              <p className="text-muted-foreground">
+                Siz hali hech qanday avtomobilni sevimlilar ro'yxatiga qo'shmagansiz
+              </p>
+            </div>
+            <Button asChild>
+              <Link href="/cars">Avtomobillarni ko'rish</Link>
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

@@ -2,10 +2,13 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Card, CardContent } from "@/components/ui/card"
 import { FavoriteButton } from "@/components/favorite-button"
 import { carImages } from "@/lib/data"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
+import { GaugeCircle, Zap, Timer, Fuel } from "lucide-react"
 
 type BrandKey = keyof typeof carImages
 type ModelKey<T extends BrandKey> = keyof typeof carImages[T]['models']
@@ -38,16 +41,18 @@ export function CarCard({ car, showFavoriteButton = true, isFavorited = false }:
   const carImage = carImages[brandSlug]?.models[car.id as ModelKey<typeof brandSlug>] || car.image
 
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-lg">
-      <div className="relative h-48 w-full">
-        <Image
-          src={carImage}
-          alt={car.name}
-          fill
-          className="object-cover"
-        />
+    <Card className="overflow-hidden">
+      <div className="relative">
+        <AspectRatio ratio={16 / 9}>
+          <Image
+            src={carImage}
+            alt={car.name}
+            fill
+            className="object-cover"
+          />
+        </AspectRatio>
         {showFavoriteButton && (
-          <div className="absolute top-2 right-2">
+          <div className="absolute right-2 top-2">
             <FavoriteButton 
               carId={car.id} 
               initialFavorited={isFavorited}
@@ -55,37 +60,50 @@ export function CarCard({ car, showFavoriteButton = true, isFavorited = false }:
           </div>
         )}
       </div>
-      <CardContent className="p-6">
-        <div className="flex justify-between items-start mb-2">
-          <div>
-            <h3 className="text-xl font-bold">{car.name}</h3>
-            <p className="text-sm text-muted-foreground">{car.brand}</p>
+      <CardContent className="grid gap-2.5 p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold">{car.name}</h3>
           </div>
-          <div className="text-lg font-bold">{car.price}</div>
+          <div className="text-sm text-muted-foreground">
+            {car.price} so'm
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-2 mb-4">
-          <div className="flex items-center text-sm">
-            <span className="text-muted-foreground mr-2">Engine:</span>
+        <div className="grid grid-cols-2 gap-2 text-sm">
+          <div className="flex items-center gap-1">
+            <GaugeCircle className="h-4 w-4" />
             <span>{car.engine}</span>
           </div>
-          <div className="flex items-center text-sm">
-            <span className="text-muted-foreground mr-2">Power:</span>
-            <span>{car.power}</span>
+          <div className="flex items-center gap-1">
+            <Zap className="h-4 w-4" />
+            <span>{car.power} ot kuchi</span>
           </div>
-          <div className="flex items-center text-sm">
-            <span className="text-muted-foreground mr-2">0-60:</span>
-            <span>{car.acceleration}</span>
+          <div className="flex items-center gap-1">
+            <Timer className="h-4 w-4" />
+            <span>{car.acceleration} sek</span>
           </div>
-          <div className="flex items-center text-sm">
-            <span className="text-muted-foreground mr-2">MPG:</span>
-            <span>{car.mpg}</span>
+          <div className="flex items-center gap-1">
+            <Fuel className="h-4 w-4" />
+            <span>{car.mpg} l/100km</span>
           </div>
         </div>
-        <Button asChild className="w-full">
-          <Link href={`/cars/${car.id}`}>View Details</Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/cars/${car.id}`}
+            className={cn(
+              buttonVariants({
+                size: "sm",
+                variant: "outline",
+              }),
+              "w-full"
+            )}
+          >
+            Batafsil
+          </Link>
+        </div>
       </CardContent>
     </Card>
   )
 }
+
 

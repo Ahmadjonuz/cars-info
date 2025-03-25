@@ -256,8 +256,8 @@ export default function ProfilePage() {
     <div className="container mx-auto py-10">
       <Card>
         <CardHeader>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Update your profile information</CardDescription>
+          <CardTitle>Profil</CardTitle>
+          <CardDescription>Profil ma'lumotlarini yangilash</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={(e) => {
@@ -266,7 +266,7 @@ export default function ProfilePage() {
           }}>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Elektron pochta</Label>
                 <Input
                   id="email"
                   type="email"
@@ -275,37 +275,37 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <Label htmlFor="fullName">Full Name</Label>
+                <Label htmlFor="fullName">To'liq ism</Label>
                 <Input
                   id="fullName"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Enter your full name"
+                  placeholder="To'liq ismingizni kiriting"
                 />
               </div>
               <div>
-                <Label htmlFor="phone">Phone</Label>
+                <Label htmlFor="phone">Telefon</Label>
                 <Input
                   id="phone"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Enter your phone number"
+                  placeholder="Telefon raqamingizni kiriting"
                 />
               </div>
               <Button type="submit" disabled={loading}>
-                {loading ? "Updating..." : "Update Profile"}
+                {loading ? "Yangilanmoqda..." : "Profilni yangilash"}
               </Button>
             </div>
           </form>
           <Separator className="my-6" />
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Account Actions</h3>
+            <h3 className="text-lg font-medium">Hisob harakatlari</h3>
             <Button
               variant="destructive"
               onClick={signOut}
               className="w-full"
             >
-              Sign Out
+              Chiqish
             </Button>
           </div>
         </CardContent>
