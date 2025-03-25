@@ -31,10 +31,10 @@ export default function RegisterPage() {
 
       toast({
         title: "Muvaffaqiyatli",
-        description: "Ro'yxatdan o'tish muvaffaqiyatli yakunlandi. Elektron pochtangizni tekshiring.",
+        description: "Ro'yxatdan o'tish muvaffaqiyatli yakunlandi. Bosh sahifaga yo'naltirilmoqdasiz.",
       })
 
-      router.push("/auth/login")
+      router.push("/")
     } catch (error: any) {
       toast({
         title: "Xato",
