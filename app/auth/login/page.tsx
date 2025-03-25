@@ -29,6 +29,13 @@ export default function LoginPage() {
 
       if (error) throw error
 
+      toast({
+        title: "Muvaffaqiyatli",
+        description: "Tizimga muvaffaqiyatli kirdingiz. Bosh sahifaga yo'naltirilmoqdasiz.",
+      })
+
+      // Wait a moment for the toast to be visible
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       router.push("/")
     } catch (error: any) {
       toast({

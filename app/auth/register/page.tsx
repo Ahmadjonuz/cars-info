@@ -22,19 +22,34 @@ export default function RegisterPage() {
     e.preventDefault()
     try {
       setLoading(true)
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
       })
 
       if (error) throw error
 
-      toast({
-        title: "Muvaffaqiyatli",
-        description: "Ro'yxatdan o'tish muvaffaqiyatli yakunlandi. Bosh sahifaga yo'naltirilmoqdasiz.",
-      })
+      if (data?.user) {
+        // Sign in the user after successful registration
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        })
 
-      router.push("/")
+        if (signInError) throw signInError
+
+        toast({
+          title: "Muvaffaqiyatli",
+          description: "Ro'yxatdan o'tish muvaffaqiyatli yakunlandi. Bosh sahifaga yo'naltirilmoqdasiz.",
+        })
+
+        // Wait a moment for the session to be established
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        router.push("/")
+      }
     } catch (error: any) {
       toast({
         title: "Xato",
