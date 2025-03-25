@@ -15,6 +15,9 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "CarInfo - Avtomobillar haqida ma'lumot",
   description: "Eng so'nggi avtomobillar haqida ma'lumot oling va ularni solishtiring",
+  icons: {
+    icon: "/images/car-info.svg",
+  },
 }
 
 export default function RootLayout({
