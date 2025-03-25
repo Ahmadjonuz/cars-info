@@ -43,7 +43,7 @@ export default function SearchPage() {
   const [query, setQuery] = useState(initialQuery)
   const [selectedBrand, setSelectedBrand] = useState<string>("all")
   const [priceRange, setPriceRange] = useState([0, 200000])
-  const [powerRange, setPowerRange] = useState([0, 700])
+  const [powerRange, setPowerRange] = useState([0, 800])
   const [accelerationRange, setAccelerationRange] = useState([0, 10])
   const [results, setResults] = useState<Car[]>(cars)
   const [loading, setLoading] = useState(false)
@@ -118,7 +118,7 @@ export default function SearchPage() {
   const resetFilters = () => {
     setSelectedBrand("all")
     setPriceRange([0, 200000])
-    setPowerRange([0, 700])
+    setPowerRange([0, 800])
     setAccelerationRange([0, 10])
     setQuery("")
     setSortBy("price-asc")
@@ -208,7 +208,7 @@ export default function SearchPage() {
                       <Slider
                         value={powerRange}
                         onValueChange={setPowerRange}
-                        max={700}
+                        max={800}
                         step={10}
                         className="w-full"
                       />
@@ -294,4 +294,3 @@ export default function SearchPage() {
     </div>
   )
 }
-

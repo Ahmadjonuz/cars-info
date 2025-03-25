@@ -66,6 +66,11 @@ export default function ProfilePage() {
         const profile = data[0]
         setFullName(profile.full_name || "")
         setPhone(profile.phone || "")
+        // Show success message when profile is loaded
+        toast({
+          title: "Muvaffaqiyatli",
+          description: "Profil muvaffaqiyatli yuklandi",
+        })
       } else {
         // Create a new profile if it doesn't exist
         console.log("Profil topilmadi, yangi profil yaratilmoqda:", user.id)
@@ -92,6 +97,11 @@ export default function ProfilePage() {
         }
 
         console.log("Yangi profil yaratildi:", newProfile)
+        // Show success message when new profile is created
+        toast({
+          title: "Muvaffaqiyatli",
+          description: "Yangi profil muvaffaqiyatli yaratildi",
+        })
       }
     } catch (error: any) {
       console.error("Profilni olishda xatolik:", {
@@ -206,8 +216,11 @@ export default function ProfilePage() {
 
       toast({
         title: "Muvaffaqiyatli",
-        description: "Profil muvaffaqiyatli yangilandi!",
+        description: "Profil muvaffaqiyatli yangilandi",
       })
+
+      // Redirect to home page after successful update
+      router.push('/')
     } catch (error: any) {
       console.error("Profilni yangilashda xatolik:", {
         name: error?.name,
@@ -219,7 +232,7 @@ export default function ProfilePage() {
       })
       toast({
         title: "Xatolik",
-        description: error?.message || "Profilni yangilashda xatolik yuz berdi. Iltimos, qayta urinib ko'ring.",
+        description: "Profilni yangilashda xatolik yuz berdi. Iltimos, qayta urinib ko'ring.",
         variant: "destructive",
       })
     } finally {

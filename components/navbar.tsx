@@ -9,7 +9,7 @@ import { useState, useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Search } from "@/components/search"
+// import { Search } from "@/components/search"
 import { User as SupabaseUser } from "@supabase/supabase-js"
 import { useSupabase } from "@/components/providers/supabase-provider"
 import {
@@ -110,6 +110,10 @@ export function Navbar() {
                     Sevimlilar
                   </Link>
                 )}
+                <div className="flex items-center justify-between pt-4 mt-4 border-t border-border">
+                  <span className="text-sm font-medium">Mavzu</span>
+                  <ModeToggle />
+                </div>
               </nav>
             </SheetContent>
           </Sheet>
@@ -132,8 +136,9 @@ export function Navbar() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <Search />
-          <ModeToggle />
+          <div className="hidden md:block">
+            <ModeToggle />
+          </div>
           {!loading && user ? (
             <>
               <Button variant="ghost" size="icon" asChild>
