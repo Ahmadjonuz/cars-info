@@ -17,13 +17,27 @@ export function FavoriteButton({ carId, initialFavorited = false }: FavoriteButt
   const { supabase } = useSupabase()
   const { toast } = useToast()
 
+  // Function to format car ID consistently
+  const formatCarId = (id: string) => id.replace(/[^a-zA-Z0-9]/g, '')
+
   useEffect(() => {
     const checkFavoriteStatus = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser()
         
         if (!user) {
+          console.log("User not found, setting isFavorite to false")
           setIsFavorite(false)
+          return
+        }
+
+        console.log("Checking favorite status for car:", carId, "and user:", user.id)
+
+        // Format car ID consistently
+        const formattedCarId = formatCarId(carId)
+
+        if (!formattedCarId) {
+          console.error("Invalid car ID provided")
           return
         }
 
@@ -31,14 +45,15 @@ export function FavoriteButton({ carId, initialFavorited = false }: FavoriteButt
           .from('favorites')
           .select('id')
           .eq('user_id', user.id)
-          .eq('car_id', carId)
+          .eq('car_id', formattedCarId)
           .maybeSingle()
 
         if (error) {
-          console.error("Error checking favorite status:", error.message)
+          console.error("Error checking favorite status:", error)
           return
         }
 
+        console.log("Favorite status check result:", data)
         setIsFavorite(!!data)
       } catch (error) {
         console.error("Error in checkFavoriteStatus:", error instanceof Error ? error.message : error)
@@ -52,8 +67,13 @@ export function FavoriteButton({ carId, initialFavorited = false }: FavoriteButt
   const toggleFavorite = async () => {
     try {
       setIsLoading(true)
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
       
+      if (userError) {
+        console.error("Error getting user:", userError)
+        throw userError
+      }
+
       if (!user) {
         toast({
           title: "Avtorizatsiya zarur",
@@ -63,27 +83,56 @@ export function FavoriteButton({ carId, initialFavorited = false }: FavoriteButt
         return
       }
 
+      console.log("Toggling favorite for car:", carId, "and user:", user.id)
+
+      // Format car ID consistently
+      const formattedCarId = formatCarId(carId)
+
+      if (!formattedCarId) {
+        throw new Error("Invalid car ID provided")
+      }
+
       if (isFavorite) {
-        const { error: deleteError } = await supabase
+        console.log("Removing from favorites...")
+        const { error: deleteError, data: deleteData } = await supabase
           .from('favorites')
           .delete()
           .eq('user_id', user.id)
-          .eq('car_id', carId)
+          .eq('car_id', formattedCarId)
+          .select()
 
-        if (deleteError) throw deleteError
+        if (deleteError) {
+          console.error("Delete error:", deleteError)
+          throw deleteError
+        }
 
+        console.log("Successfully removed from favorites:", deleteData)
         setIsFavorite(false)
         toast({
           title: "Sevimlilardan o'chirildi",
           description: "Bu avtomobil sevimlilar ro'yxatingizdan o'chirildi.",
         })
       } else {
-        const { error: insertError } = await supabase
+        console.log("Adding to favorites with formatted ID:", formattedCarId)
+        const { error: insertError, data: insertData } = await supabase
           .from('favorites')
-          .insert([{ user_id: user.id, car_id: carId }])
+          .insert([{ 
+            user_id: user.id, 
+            car_id: formattedCarId 
+          }])
+          .select()
 
-        if (insertError) throw insertError
+        if (insertError) {
+          console.error("Insert error details:", {
+            message: insertError.message,
+            details: insertError.details,
+            hint: insertError.hint,
+            code: insertError.code
+          })
+          throw insertError
+        }
 
+        console.log("Successfully added to favorites:", insertData)
         setIsFavorite(true)
         toast({
           title: "Sevimlilarga qo'shildi",

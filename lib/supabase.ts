@@ -10,9 +10,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
-    storageKey: 'supabase.auth.token',
-    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+    storageKey: 'sb-auth-token',
+    storage: typeof window === 'undefined' ? undefined : window.localStorage,
     detectSessionInUrl: true,
+    autoRefreshToken: true,
     flowType: 'pkce'
   }
 }) 

@@ -10,6 +10,11 @@ CREATE TABLE IF NOT EXISTS public.favorites (
 -- Enable Row Level Security
 ALTER TABLE public.favorites ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Users can view their own favorites" ON public.favorites;
+DROP POLICY IF EXISTS "Users can insert their own favorites" ON public.favorites;
+DROP POLICY IF EXISTS "Users can delete their own favorites" ON public.favorites;
+
 -- Create policies
 CREATE POLICY "Users can view their own favorites"
     ON public.favorites
@@ -25,6 +30,10 @@ CREATE POLICY "Users can delete their own favorites"
     ON public.favorites
     FOR DELETE
     USING (auth.uid() = user_id);
+
+-- Grant necessary permissions to authenticated users
+GRANT ALL ON public.favorites TO authenticated;
+GRANT USAGE ON SCHEMA public TO authenticated;
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS favorites_user_id_idx ON public.favorites(user_id);

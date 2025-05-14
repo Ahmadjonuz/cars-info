@@ -32,21 +32,21 @@ export default function FavoritesPage() {
 
   const fetchFavorites = async () => {
     try {
-      console.log("Sevimlilar yuklanmoqda...")
+      console.log("Fetching favorites...")
       const { data: { user }, error: userError } = await supabase.auth.getUser()
       
       if (userError) {
-        console.error("Foydalanuvchini olishda xatolik:", userError)
+        console.error("Error getting user:", userError)
         throw userError
       }
 
       if (!user) {
-        console.log("Foydalanuvchi topilmadi, login sahifasiga yo'naltirilmoqda")
-        router.push('/login')
+        console.log("No user found, redirecting to login")
+        router.push('/auth/login')
         return
       }
 
-      console.log("Foydalanuvchi topildi:", user.id)
+      console.log("User found:", user.id)
       // Get user's favorite car IDs
       const { data: favoriteData, error: favoriteError } = await supabase
         .from('favorites')
@@ -54,24 +54,39 @@ export default function FavoritesPage() {
         .eq('user_id', user.id)
 
       if (favoriteError) {
-        console.error("Sevimlilarni olishda xatolik:", favoriteError)
+        console.error("Error fetching favorites:", favoriteError)
         throw favoriteError
       }
 
-      console.log("Sevimlilar ma'lumotlari:", favoriteData)
+      console.log("Favorite data from database:", favoriteData)
+      
       // Get the full car details for each favorite
       const favoriteCars = favoriteData
         .map(favorite => {
-          const car = featuredCars.find(car => car.id === favorite.car_id)
-          console.log("Sevimli avtomobil topildi:", favorite.car_id, car)
+          // Format the stored car_id back to match the original format
+          const originalCarId = favorite.car_id.replace(/([a-zA-Z]+)(\d+)/, '$1-$2')
+          console.log("Looking for car with original ID:", originalCarId)
+          
+          const car = featuredCars.find(car => {
+            const formattedCarId = car.id.replace(/[^a-zA-Z0-9]/g, '')
+            console.log("Comparing:", formattedCarId, "with:", favorite.car_id)
+            return formattedCarId === favorite.car_id
+          })
+          
+          if (car) {
+            console.log("Found car:", car.id)
+          } else {
+            console.log("Car not found for ID:", favorite.car_id)
+          }
+          
           return car
         })
-        .filter(car => car !== undefined)
+        .filter((car): car is Car => car !== undefined)
 
-      console.log("Barcha sevimli avtomobillar:", favoriteCars)
+      console.log("Final favorite cars:", favoriteCars)
       setFavorites(favoriteCars)
     } catch (error) {
-      console.error("Sevimlilarni olishda xatolik:", error)
+      console.error("Error in fetchFavorites:", error)
       toast({
         title: "Xatolik",
         description: "Sevimlilarni yuklashda xatolik yuz berdi. Iltimos, qayta urinib ko'ring.",
@@ -83,7 +98,7 @@ export default function FavoritesPage() {
   }
 
   useEffect(() => {
-    console.log("Sevimlilar sahifasi yuklanmoqda...")
+    console.log("Favorites page mounted")
     fetchFavorites()
 
     // Subscribe to changes in the favorites table
@@ -97,14 +112,14 @@ export default function FavoritesPage() {
           table: 'favorites'
         },
         (payload) => {
-          console.log("Sevimlilar o'zgartirildi:", payload)
+          console.log("Favorites table changed:", payload)
           fetchFavorites()
         }
       )
       .subscribe()
 
     return () => {
-      console.log("Sevimlilar sahifasi tozalanmoqda...")
+      console.log("Favorites page unmounting")
       supabase.removeChannel(channel)
     }
   }, [supabase, router, toast])
@@ -133,7 +148,12 @@ export default function FavoritesPage() {
         {favorites.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {favorites.map((car) => (
-              <CarCard key={car.id} car={car} />
+              <CarCard 
+                key={car.id} 
+                car={car} 
+                showFavoriteButton={true}
+                isFavorited={true}
+              />
             ))}
           </div>
         ) : (

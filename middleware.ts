@@ -1,28 +1,39 @@
-  import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+
+// Bu routelar uchun autentifikatsiya talab qilinadi
+const protectedRoutes = [
+  '/profile',
+  '/favorites',
+  '/compare'
+]
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   const supabase = createMiddlewareClient({ req, res })
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
 
-  // If user is not signed in and the current path is not /auth/login or /auth/register,
-  // redirect the user to /auth/login
-  if (!session && !req.nextUrl.pathname.startsWith('/auth/')) {
-    return NextResponse.redirect(new URL('/auth/login', req.url))
+    // Agar yo'l protected bo'lsa va user kiritmagan bo'lsa, login sahifasiga yo'naltirish
+    if (protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route)) && !session) {
+      return NextResponse.redirect(new URL('/auth/login', req.url))
+    }
+
+    // Agar user tizimga kirgan bo'lsa va auth sahifalariga kirmoqchi bo'lsa, 
+    // asosiy sahifaga yo'naltirish
+    if (session && req.nextUrl.pathname.startsWith('/auth/')) {
+      return NextResponse.redirect(new URL('/', req.url))
+    }
+
+    return res
+  } catch (error) {
+    console.error('Middleware error:', error)
+    return res
   }
-
-  // If user is signed in and the current path is /auth/login or /auth/register,
-  // redirect the user to /
-  if (session && req.nextUrl.pathname.startsWith('/auth/')) {
-    return NextResponse.redirect(new URL('/', req.url))
-  }
-
-  return res
 }
 
 export const config = {
@@ -33,7 +44,8 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public (public files)
+     * - api (API routes)
      */
-    '/((?!_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!_next/static|_next/image|favicon.ico|public|api).*)',
   ],
 } 

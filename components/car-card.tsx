@@ -13,10 +13,11 @@ import { GaugeCircle, Zap, Timer, Fuel } from "lucide-react"
 type BrandKey = keyof typeof carImages
 type ModelKey<T extends BrandKey> = keyof typeof carImages[T]['models']
 
-export interface Car {
+interface Car {
   id: string
   name: string
   brand: string
+  image: string
   price: string
   engine: string
   power: string
@@ -24,7 +25,6 @@ export interface Car {
   mpg: string
   description: string
   features: string[]
-  image: string
 }
 
 interface CarCardProps {
@@ -66,7 +66,7 @@ export function CarCard({ car, showFavoriteButton = true, isFavorited = false }:
             <h3 className="font-semibold">{car.name}</h3>
           </div>
           <div className="text-sm text-muted-foreground">
-            {car.price} so'm
+            {car.price}
           </div>
         </div>
         <div className="grid grid-cols-2 gap-2 text-sm">
